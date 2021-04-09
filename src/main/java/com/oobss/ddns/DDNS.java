@@ -1,5 +1,6 @@
 package com.oobss.ddns;
 
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.alidns.model.v20150109.DescribeSubDomainRecordsRequest;
@@ -8,13 +9,17 @@ import com.aliyuncs.alidns.model.v20150109.UpdateDomainRecordRequest;
 import com.aliyuncs.alidns.model.v20150109.UpdateDomainRecordResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonReader;
 import com.oobss.ddns.constant.DnsConstant;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -67,14 +72,9 @@ public class DDNS implements Job {
                 e2.printStackTrace();
             }
         }
-        Pattern pat = Pattern.compile(DnsConstant.REGEX_IP_6);
-        Matcher mat = pat.matcher(result);
-        String res = "";
-        while (mat.find()) {
-            res = mat.group();
-            break;
-        }
-        return res;
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        String ip = jsonObject.getString(DnsConstant.FIELD_NAME_IP);
+        return ip;
     }
 
     /**

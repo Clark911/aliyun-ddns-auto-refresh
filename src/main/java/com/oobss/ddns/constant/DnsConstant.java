@@ -33,5 +33,8 @@ public class DnsConstant {
      * URL:本机外网IP6地址获取网址
      */
     public static final String URL_JSON_IP_6 = "https://ipv6.jsonip.com/";
-
+    /**
+     * json 字符串中ip字段名
+     */
+    public static final String FIELD_NAME_IP = "ip";
 }
